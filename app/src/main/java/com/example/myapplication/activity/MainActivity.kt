@@ -1,7 +1,9 @@
 package com.example.myapplication.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
@@ -14,8 +16,16 @@ import com.example.myapplication.network.ApiHelpers
 import com.example.myapplication.network.ApiRequestCallback
 import com.example.myapplication.recyclerview.recyclerview.ForecastAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.TextView
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.os.Parcel
+import android.os.Parcelable
 
-class MainActivity : AppCompatActivity() {
+
+
+class MainActivity() : AppCompatActivity(), Parcelable {
 
     /**
      * All the model are created with a website and with a json from the API (be carefull
@@ -25,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var weatherList : MutableList<ForecastList>
     lateinit var apiHelpersInstance: ApiHelpers
 
+    constructor(parcel: Parcel) : this() {
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         apiHelpersInstance = ApiHelpers(this)
 
-        val recyclerView = recyclerview_forecast // on récupère ici le RV concerné
+        val recyclerView = recyclerview_forecast // on récupère ici le RV
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = weatherAdapter
 
@@ -65,11 +78,46 @@ class MainActivity : AppCompatActivity() {
 
                     }
                 }
-                // display an error with the request is unsuccessful
+                // display an error when the request is unsuccessful
                 override fun onError(error: ApiError?) {
                     super.onError(error)
                 }
             }
         )
+    }
+
+    inner class ExitAndroidAppProgrammatically : AppCompatActivity() {
+
+        internal var textView: TextView? = null
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+
+        }
+
+        fun closeApplication(view: View) {
+            finish()
+            moveTaskToBack(true)
+        }
+
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<MainActivity> {
+        override fun createFromParcel(parcel: Parcel): MainActivity {
+            return MainActivity(parcel)
+        }
+
+        override fun newArray(size: Int): Array<MainActivity?> {
+            return arrayOfNulls(size)
+        }
     }
 }

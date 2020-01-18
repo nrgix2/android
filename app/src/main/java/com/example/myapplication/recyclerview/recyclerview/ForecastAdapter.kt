@@ -9,6 +9,7 @@ import com.example.myapplication.model.ForecastList
 import com.example.myapplication.model.ForecastResult
 import kotlinx.android.synthetic.main.item_forecast.view.*
 
+
 class ForecastAdapter(private val myDataset: MutableList<ForecastList>)  : RecyclerView.Adapter<ForecastAdapter.MachinViewHolder>() {
 
 
@@ -37,5 +38,6 @@ class ForecastAdapter(private val myDataset: MutableList<ForecastList>)  : Recyc
         holder._desc.text = " ${myDataset[position].main.temp.toString()} °C"
     }
 
-    override fun getItemCount() = myDataset.size
+
+override fun getItemCount() = myDataset.size
 }
