@@ -1,4 +1,2 @@
-MyApplication2
-
-Appel à une api
+Appel à une api avec un 
 RecyclerView
